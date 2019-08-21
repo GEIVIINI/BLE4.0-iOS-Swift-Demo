@@ -10,12 +10,16 @@ import UIKit
 import CoreBluetooth
 
 class MainViewController: UIViewController, CBCentralManagerDelegate, CBPeripheralDelegate {
-    var manager:CBCentralManager? = nil
-    var mainPeripheral:CBPeripheral? = nil
-    var mainCharacteristic:CBCharacteristic? = nil
+    var manager: CBCentralManager?
+    var mainPeripheral: CBPeripheral?
+    var mainCharacteristic: CBCharacteristic?
     
-    let BLEService = "DFB0"
-    let BLECharacteristic = "DFB1"
+    let BLEService = "FEA7D4D0-7C81-41A3-9B1E-553B6CC4A17C"
+    let BLECharacteristic = "FEA7D4D0-7C81-41A3-9B1E-553B6CC4A17C"
+    
+    
+    //let BLEService = "DFB0"
+    //let BLECharacteristic = "DFB1"
     
     @IBOutlet weak var recievedMessageText: UILabel!
     
@@ -65,6 +69,7 @@ class MainViewController: UIViewController, CBCentralManagerDelegate, CBPeripher
     }
     
     // MARK: Button Methods
+    
     @objc func scanButtonPressed() {
         performSegue(withIdentifier: "scan-segue", sender: nil)
     }
@@ -75,17 +80,34 @@ class MainViewController: UIViewController, CBCentralManagerDelegate, CBPeripher
     }
     
     @IBAction func sendButtonPressed(_ sender: AnyObject) {
-        let helloWorld = "Hello World!"
-        let dataToSend = helloWorld.data(using: String.Encoding.utf8)
+
+        let alert = UIAlertController(title: "Command", message: "Enter a iot command.", preferredStyle: .alert)
         
-        if (mainPeripheral != nil) {
-            mainPeripheral?.writeValue(dataToSend!, for: mainCharacteristic!, type: CBCharacteristicWriteType.withoutResponse)
-        } else {
-            print("haven't discovered device yet")
+        alert.addTextField { (textField) in
+            textField.placeholder = "example : switch:true"
         }
+        
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] (_) in
+            let textField = alert?.textFields![0] // Force unwrapping because we know it exists.
+            let dataToSend = textField?.text!.data(using: String.Encoding.utf8)
+            if (self.mainPeripheral != nil) {
+                if let mainCharacteristicData = self.mainCharacteristic {
+                    self.mainPeripheral?.writeValue(dataToSend!, for: mainCharacteristicData, type: CBCharacteristicWriteType.withoutResponse)
+                    print("Success")
+                } else {
+                    print("failed")
+                }
+            } else {
+                print("haven't discovered device yet")
+            }
+        }))
+        
+        self.present(alert, animated: true, completion: nil)
+        
     }
     
-    // MARK: - CBCentralManagerDelegate Methods    
+    // MARK: - CBCentralManagerDelegate Methods
+    
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
         mainPeripheral = nil
         customiseNavigationBar()
@@ -98,6 +120,7 @@ class MainViewController: UIViewController, CBCentralManagerDelegate, CBPeripher
     }
     
     // MARK: CBPeripheralDelegate Methods
+    
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         
         for service in peripheral.services! {
@@ -120,11 +143,15 @@ class MainViewController: UIViewController, CBCentralManagerDelegate, CBPeripher
                 peripheral.discoverCharacteristics(nil, for: service)
             }
             
+            //Pai Test
+            
+            peripheral.discoverCharacteristics(nil, for: service)
+            
         }
     }
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
-
+        
         //get device name
         if (service.uuid.uuidString == "1800") {
             
@@ -172,6 +199,15 @@ class MainViewController: UIViewController, CBCentralManagerDelegate, CBPeripher
             
         }
         
+        //Pai test
+        
+        for characteristic in service.characteristics! {
+            mainCharacteristic = characteristic
+            //Set Notify is useful to read incoming data async
+            peripheral.setNotifyValue(true, for: characteristic)
+            print("Found Bluno Data Characteristic")
+        }
+        
     }
     
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
@@ -193,10 +229,15 @@ class MainViewController: UIViewController, CBCentralManagerDelegate, CBPeripher
             //data recieved
             if(characteristic.value != nil) {
                 let stringValue = String(data: characteristic.value!, encoding: String.Encoding.utf8)!
-            
+                
                 recievedMessageText.text = stringValue
             }
         }
+        
+        // Pai test
+        
+        let stringValue = String(data: characteristic.value!, encoding: String.Encoding.utf8)!
+        recievedMessageText.text = stringValue
         
         
     }
