@@ -43,5 +43,15 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>bluetooth</string>
+    <key>UIRequiredDeviceCapabilities</key>
+    <array>
+        <string>bluetooth-le</string>
+    </array>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>...Detailed reason...</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>...Detailed reason...</string>
 </dict>
 </plist>
