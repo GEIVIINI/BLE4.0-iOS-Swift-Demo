@@ -56,7 +56,7 @@ class MainViewController: UIViewController, CBCentralManagerDelegate, CBPeripher
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         if (segue.identifier == "scan-segue") {
-            let scanController : ScanTableViewController = segue.destination as! ScanTableViewController
+            let scanController : ScanViewController = segue.destination as! ScanViewController
             
             //set the manager's delegate to the scan view so it can call relevant connection methods
             manager?.delegate = scanController

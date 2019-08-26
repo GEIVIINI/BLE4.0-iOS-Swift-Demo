@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		66DE5E5A2314939100EEA40A /* ScanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66DE5E592314939100EEA40A /* ScanViewController.swift */; };
 		785098841D365ADD00976091 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785098831D365ADD00976091 /* AppDelegate.swift */; };
 		785098861D365ADD00976091 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 785098851D365ADD00976091 /* MainViewController.swift */; };
 		785098891D365ADD00976091 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 785098871D365ADD00976091 /* Main.storyboard */; };
@@ -17,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		66DE5E592314939100EEA40A /* ScanViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanViewController.swift; sourceTree = "<group>"; };
 		785098801D365ADD00976091 /* BLEDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BLEDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		785098831D365ADD00976091 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		785098851D365ADD00976091 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
@@ -63,6 +65,7 @@
 				785098831D365ADD00976091 /* AppDelegate.swift */,
 				785098851D365ADD00976091 /* MainViewController.swift */,
 				785098951D365E8E00976091 /* ScanTableViewController.swift */,
+				66DE5E592314939100EEA40A /* ScanViewController.swift */,
 				785098871D365ADD00976091 /* Main.storyboard */,
 				7850988A1D365ADD00976091 /* Assets.xcassets */,
 				7850988C1D365ADD00976091 /* LaunchScreen.storyboard */,
@@ -158,6 +161,7 @@
 				785098861D365ADD00976091 /* MainViewController.swift in Sources */,
 				785098841D365ADD00976091 /* AppDelegate.swift in Sources */,
 				785098961D365E8E00976091 /* ScanTableViewController.swift in Sources */,
+				66DE5E5A2314939100EEA40A /* ScanViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

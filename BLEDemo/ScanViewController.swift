@@ -1,15 +1,18 @@
 //
-//  ScanTableViewController.swift
+//  ScanViewController.swift
 //  BLEDemo
 //
-//  Created by Rick Smith on 13/07/2016.
-//  Copyright © 2016 Rick Smith. All rights reserved.
+//  Created by Soemsak on 27/8/2562 BE.
+//  Copyright © 2562 Rick Smith. All rights reserved.
 //
 
 import UIKit
 import CoreBluetooth
 
-class ScanTableViewController: UITableViewController, CBCentralManagerDelegate, CBPeripheralDelegate {
+class ScanViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, CBCentralManagerDelegate, CBPeripheralDelegate {
+
+    @IBOutlet weak var loading: UIActivityIndicatorView!
+    @IBOutlet weak var tableView: UITableView!
     
     var peripherals:[CBPeripheral] = []
     var manager:CBCentralManager? = nil
@@ -21,44 +24,42 @@ class ScanTableViewController: UITableViewController, CBCentralManagerDelegate, 
     var isOpen = true
     
     override func viewDidLoad() {
-        super.viewDidLoad()    
+        super.viewDidLoad()
+        loading.startAnimating()
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.tableFooterView = UIView()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         scanBLEDevices()
-    }    
+    }
     
     // MARK: - Table view data source
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return peripherals.count
     }
     
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "scanTableCell", for: indexPath)
-        let peripheral = peripherals[indexPath.row]
-        if peripheral.name == "" {
-            cell.textLabel?.text = "???"
-        } else {
-            cell.textLabel?.text = peripheral.name
-        }
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        let peripheral = peripherals[indexPath.row]
-//        manager?.connect(peripheral, options: nil)
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        //        let peripheral = peripherals[indexPath.row]
+        //        manager?.connect(peripheral, options: nil)
         var str = "{switch:true}"
         if isOpen {
             str = "{switch:true}"
             isOpen = !isOpen
         } else {
-             str = "{switch:false}"
+            str = "{switch:false}"
             isOpen = !isOpen
         }
         let data = Data(str.utf8)
@@ -81,16 +82,17 @@ class ScanTableViewController: UITableViewController, CBCentralManagerDelegate, 
     // MARK: - CBCentralManagerDelegate Methods
     
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
-//        if(!peripherals.contains(peripheral)) {
-//            if peripheral.name != "" && peripheral.name != nil {
-//                peripherals.append(peripheral)
-//            }
-//        }
-//        self.tableView.reloadData()
         if(!peripherals.contains(peripheral)) {
             if peripheral.name != "" && peripheral.name != nil {
+                /*
+                for service in peripheral.services! {
+                    print("Service found with UUID: " + service.uuid.uuidString)
+                    peripheral.discoverCharacteristics(nil, for: service)
+                }
+                */
                 if peripheral.name == "Node02" {
                     manager?.connect(peripheral, options: nil)
+                    self.dismiss(animated: true, completion: nil)
                 }
                 peripherals.append(peripheral)
             }
@@ -142,5 +144,5 @@ class ScanTableViewController: UITableViewController, CBCentralManagerDelegate, 
         print("stringValue", stringValue)
         //recievedMessageText.text = stringValue
     }
-    
+
 }
